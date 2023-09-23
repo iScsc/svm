@@ -28,7 +28,7 @@ add eax, ebx        ; adds eax and ebx and stores the result (4) in eax
 
 A VM written in Python could implement this step like this:
 
-```py
+```python
 # Init the VM
 r1 = 0
 r2 = 0
@@ -39,22 +39,32 @@ sample = "m13m21a"
 
 # The VM implementation
 while ip < len(sample):
+    print(f"r1: {r1}, r2: {r2}: ip: {ip}")
     if sample[ip] == "m":
-        if sample[ip+1] == "1":
-            r1 = int(sample[ip+2])
+        if sample[ip + 1] == "1":
+            r1 = int(sample[ip + 2])
             ip += 3
-        else if sample[ip+1] == "2":
-            r2 = sample[ip+2]
+        elif sample[ip + 1] == "2":
+            r2 = int(sample[ip + 2])
             ip += 3
         else:
             raise Exception("Unknown opcode")
-    else if sample[ip] == "a":
+    elif sample[ip] == "a":
         r1 += r2
         ip += 1
 
-print(r1)   # 4
-print(r1)   # 1
-print(ip)   # 7
+print()
+print("final results:")
+print(f"    r1: {r1}, r2: {r2}: ip: {ip}")
+```
+will give the following output
+```
+r1: 0, r2: 0: ip: 0
+r1: 3, r2: 0: ip: 3
+r1: 3, r2: 1: ip: 6
+
+final results:
+    r1: 4, r2: 1: ip: 7
 ```
 
 So, thanks to the VM, we translated a small chunk of assembly which was easy to understand in a unintelligible string `m13m21a`. The only way for the reverse engineer to understand this piece of code is to reverse the VM (which can be very difficult in some cases) and then translate the obfuscated code!
